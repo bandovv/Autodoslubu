@@ -7,7 +7,7 @@ export default function Footer() {
           Ekskluzywny wynajem Mercedesa Klasy G 63 AMG wraz z kierowcą. Realizujemy transfery ślubne, przejazdy okolicznościowe i biznesowe na najwyższym poziomie.
         </p>
         <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          &copy; {new Date().getFullYear()} VIP Transfer Białystok. Wszelkie prawa zastrzeżone.
+          &copy; {new Date().getFullYear()} AUTODOSLUBUBIALYSTOK. Wszelkie prawa zastrzeżone.
         </div>
       </div>
     </footer>

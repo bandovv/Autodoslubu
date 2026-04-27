@@ -52,7 +52,7 @@ export default function Hero() {
              </ul>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 mb-10 pb-10 border-b border-pink-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 mb-10 pb-10 border-b border-pink-100">
              {VEHICLE_SPECS.map((spec, idx) => (
                 <div key={idx}>
                    <div className="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">{spec.label}</div>
@@ -63,7 +63,7 @@ export default function Hero() {
 
           <div>
              <p className="max-w-md text-sm text-slate-500 leading-relaxed mb-10">
-               <strong className="text-[#C2185B]">VIP Transfer Białystok</strong> oferuje przewozy pasażerskie w modelu z pełną obsługą przewoźnika, zgłoszenie przewozu oraz standardy bezpieczeństwa są uwzględnione w ramach usługi.
+               <strong className="text-[#C2185B]">Nasza firma</strong> oferuje przewozy pasażerskie w modelu z pełną obsługą przewoźnika, zgłoszenie przewozu oraz standardy bezpieczeństwa są uwzględnione w ramach usługi.
              </p>
 
              <button 
@@ -77,12 +77,12 @@ export default function Hero() {
         </div>
 
         {/* Optional Right Side Image Overlay if we want a clearer picture of the car */}
-        <div className="hidden lg:block w-[450px] shrink-0 mt-12 lg:mt-0 relative">
+        <div className="hidden lg:block w-[560px] xl:w-[620px] shrink-0 mt-12 lg:mt-0 relative">
              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 rounded-2xl" />
              <img
                 src={heroSideImage}
                 alt="AMG G63 Front"
-                className="w-full h-auto rounded-2xl border-4 border-white shadow-xl object-cover aspect-[4/5] scale-x-[-1]"
+                className="w-full h-auto rounded-2xl border-4 border-white shadow-xl object-cover aspect-[5/6] scale-x-[-1]"
              />
         </div>
       </div>

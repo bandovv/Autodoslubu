@@ -17,7 +17,5 @@ export const TESTIMONIALS = [
 ];
 
 export const VEHICLE_SPECS = [
-  { label: "MIEJSCA", value: "3-4 Pasażerów" },
-  { label: "BAGAŻE", value: "4 Duże Walizki" },
   { label: "BAZA", value: "od 2390 PLN" },
 ];

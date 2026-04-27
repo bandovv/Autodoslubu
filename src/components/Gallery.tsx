@@ -71,12 +71,12 @@ export default function Gallery() {
           {GALLERY_IMAGES.map((img, idx) => (
              <div 
                key={idx} 
-               className="shrink-0 w-[85vw] sm:w-[45vw] md:w-[32vw] aspect-[4/3] snap-start overflow-hidden rounded-3xl border border-pink-50 shadow-xl shadow-pink-900/5 group cursor-grab active:cursor-grabbing bg-white flex items-center justify-center"
+               className="shrink-0 w-[85vw] sm:w-[45vw] md:w-[32vw] aspect-[4/3] snap-start overflow-hidden rounded-3xl border border-pink-50 shadow-xl shadow-pink-900/5 group cursor-zoom-in bg-white flex items-center justify-center"
              >
                <img 
                  src={img} 
                  alt={`Galeria ${idx + 1}`} 
-                 className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-in-out" 
+                 className="w-full h-full object-contain group-hover:scale-125 transition-transform duration-700 ease-in-out" 
                />
              </div>
           ))}
