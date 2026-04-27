@@ -43,8 +43,7 @@ export default function Gallery() {
     <section id="galeria" className="py-24 bg-white border-b border-pink-100 overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
-           <h2 className="text-[11px] font-bold uppercase tracking-widest text-[#C2185B] mb-3">Galeria Zdjęć</h2>
-           <h3 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight">Królewskie Wejście</h3>
+           <h2 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight">Galeria zdjęć</h2>
         </div>
         
         <div className="flex items-center gap-3">

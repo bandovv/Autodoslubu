@@ -1,6 +1,6 @@
 import { ChevronDown, Check } from "lucide-react";
 import { VEHICLE_SPECS } from "../data";
-import heroImage from "../assets/gallery/Gklasa5.png";
+import heroImage from "../assets/gallery/hero-main.png";
 import heroSideImage from "../assets/gallery/gklasa-9.png";
 
 export default function Hero() {
@@ -15,7 +15,7 @@ export default function Hero() {
          <img
             src={heroImage}
             alt="Mercedes G Klasa AMG"
-            className="w-full h-full object-cover object-center opacity-30 grayscale scale-x-[-1]"
+            className="w-full h-full object-cover object-center opacity-30 grayscale"
          />
       </div>
 
