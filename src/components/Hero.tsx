@@ -1,7 +1,7 @@
 import { ChevronDown, Check } from "lucide-react";
 import { VEHICLE_SPECS } from "../data";
 import heroImage from "../assets/gallery/hero-main.png";
-import heroSideImage from "../assets/gallery/gklasa-9.png";
+import heroSideImage from "../assets/gallery/hero-side.png";
 
 export default function Hero() {
   const scrollToKalkulator = () => {
