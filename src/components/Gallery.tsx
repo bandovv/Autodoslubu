@@ -1,15 +1,27 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import gklasa1 from "../assets/gallery/gklasa-1.png";
+import gklasa2 from "../assets/gallery/gklasa-2.png";
+import gklasa3 from "../assets/gallery/gklasa-3.png";
+import gklasa4 from "../assets/gallery/gklasa-4.png";
+import gklasa5 from "../assets/gallery/gklasa-5.png";
+import gklasa6 from "../assets/gallery/gklasa-6.png";
+import gklasa7 from "../assets/gallery/gklasa-7.png";
+import gklasa8 from "../assets/gallery/gklasa-8.png";
+import gklasa9 from "../assets/gallery/gklasa-9.png";
+import gklasa10 from "../assets/gallery/gklasa-10.png";
 
-// Używamy stylowych zdjęć luxury cars / ślubnych jako placeholderów na te,
-// o których mówiłeś (jako że AI Studio ładuje własne assety, używam mocnych Unsplash z autami).
 const GALLERY_IMAGES = [
-  "https://images.unsplash.com/photo-1627409240436-1e6dcb5af1ef?q=80&w=1200&auto=format&fit=crop", // Dekoracje / Ślubne 1
-  "https://images.unsplash.com/photo-1549419163-fdfab5b00c3b?q=80&w=1200&auto=format&fit=crop", // Ślubne 2
-  "https://images.unsplash.com/photo-1520031441872-265e4ff70366?q=80&w=1200&auto=format&fit=crop", // G-Class 1
-  "https://images.unsplash.com/photo-1533558701576-23c65e0272fb?q=80&w=1200&auto=format&fit=crop", // G-Class 2
-  "https://images.unsplash.com/photo-1627409240367-932cf3cecb90?q=80&w=1200&auto=format&fit=crop", // Detale
-  "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop", 
+  gklasa1,
+  gklasa2,
+  gklasa3,
+  gklasa4,
+  gklasa5,
+  gklasa6,
+  gklasa7,
+  gklasa8,
+  gklasa9,
+  gklasa10,
 ];
 
 export default function Gallery() {

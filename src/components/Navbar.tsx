@@ -14,7 +14,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          <button onClick={() => scrollTo("kalkulator")} className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 hover:text-[#C2185B] transition-colors">Kalkulator</button>
+          <button onClick={() => scrollTo("kalkulator")} className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 hover:text-[#C2185B] transition-colors">Wycena</button>
           <button onClick={() => scrollTo("kontakt")} className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 hover:text-[#C2185B] transition-colors">Kontakt</button>
           
           <a href="tel:+48600479905" className="flex items-center border border-pink-100 hover:bg-[#FCE4EC] text-[#C2185B] px-4 py-2 rounded-full transition-colors text-[11px] font-bold uppercase tracking-widest">

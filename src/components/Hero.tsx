@@ -1,5 +1,7 @@
 import { ChevronDown, Check } from "lucide-react";
 import { VEHICLE_SPECS } from "../data";
+import heroImage from "../assets/gallery/Gklasa5.png";
+import heroSideImage from "../assets/gallery/gklasa-9.png";
 
 export default function Hero() {
   const scrollToKalkulator = () => {
@@ -10,9 +12,9 @@ export default function Hero() {
     <section className="relative min-h-[90vh] flex items-center pt-20 pb-16 bg-[#FDF9FB] overflow-hidden">
       <div className="absolute inset-0 z-0">
          <div className="absolute inset-0 bg-[#FDF9FB]/90 z-10" />
-         <img 
-            src="https://images.unsplash.com/photo-1520031441872-265e4ff70366?q=80&w=2000&auto=format&fit=crop" 
-            alt="Mercedes G Class" 
+         <img
+            src={heroImage}
+            alt="Mercedes G Klasa AMG"
             className="w-full h-full object-cover object-center opacity-30 grayscale scale-x-[-1]"
          />
       </div>
@@ -77,9 +79,9 @@ export default function Hero() {
         {/* Optional Right Side Image Overlay if we want a clearer picture of the car */}
         <div className="hidden lg:block w-[450px] shrink-0 mt-12 lg:mt-0 relative">
              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10 rounded-2xl" />
-             <img 
-                src="https://images.unsplash.com/photo-1520031441872-265e4ff70366?q=80&w=800&auto=format&fit=crop" 
-                alt="AMG G63 Front" 
+             <img
+                src={heroSideImage}
+                alt="AMG G63 Front"
                 className="w-full h-auto rounded-2xl border-4 border-white shadow-xl object-cover aspect-[4/5] scale-x-[-1]"
              />
         </div>

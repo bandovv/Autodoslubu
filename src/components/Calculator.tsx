@@ -122,7 +122,7 @@ export default function Calculator() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-[#C2185B] text-[11px] font-bold uppercase tracking-widest mb-3">Wycena Przejazdu</h2>
-          <h3 className="text-4xl md:text-5xl border-b-0 font-serif text-slate-900 italic mb-6">Kalkulator Wynajmu</h3>
+          <h3 className="text-4xl md:text-5xl border-b-0 font-serif text-slate-900 italic mb-6">Wycena Wynajmu</h3>
           <p className="text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
             Oblicz orientacyjny koszt wynajmu G klasy na Twój ślub. Kliknij na mapie punkt początkowy i końcowy lub wpisz dystans ręcznie.
           </p>
