@@ -1,37 +1,16 @@
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline } from "react-leaflet";
-import L from 'leaflet';
-import { Calculator as CalculatorIcon, Route, Clock, ChevronRight, MapPin } from "lucide-react";
-import { cn } from "../lib/utils";
-import { renderToStaticMarkup } from 'react-dom/server';
-
-const createCustomIcon = (colorClass: string) => {
-  const iconMarkup = renderToStaticMarkup(
-    <div className="relative -ml-3 -mt-6">
-      <MapPin className={`w-8 h-8 drop-shadow-md ${colorClass}`} fill="white" />
-    </div>
-  );
-  return L.divIcon({
-    html: iconMarkup,
-    className: 'custom-leaflet-icon bg-transparent border-none', // ensure no default white box
-  });
-};
-
-const startIcon = createCustomIcon('text-slate-900');
-const endIcon = createCustomIcon('text-[#C2185B]');
-
-interface Point {
-  lat: number;
-  lng: number;
-}
+import { useMemo, useState } from "react";
+import { GoogleMap, DirectionsRenderer, useJsApiLoader } from "@react-google-maps/api";
+import { Route, Clock, ChevronRight, Plus, Trash2 } from "lucide-react";
 
 export default function Calculator() {
-  const [startPoint, setStartPoint] = useState<Point | null>(null);
-  const [endPoint, setEndPoint] = useState<Point | null>(null);
+  const [startAddress, setStartAddress] = useState("");
+  const [endAddress, setEndAddress] = useState("");
+  const [stops, setStops] = useState<string[]>([""]);
+  const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [distanceKm, setDistanceKm] = useState<number>(0);
   const [durationHours, setDurationHours] = useState<number>(5);
   const [manualDistance, setManualDistance] = useState<string>("");
-  const [routeLine, setRouteLine] = useState<[number, number][]>([]);
+  const [routeError, setRouteError] = useState("");
   const [isCalculating, setIsCalculating] = useState(false);
 
   const BASE_PRICE = 2390;
@@ -40,60 +19,72 @@ export default function Calculator() {
   const EXTRA_KM_PRICE = 10;
   const EXTRA_HOUR_PRICE = 200;
 
-  useEffect(() => {
-    if (startPoint && endPoint) {
-      calculateRoute(startPoint, endPoint);
-    } else {
-      setRouteLine([]);
-      if (!manualDistance) setDistanceKm(0);
-    }
-  }, [startPoint, endPoint]);
+  const mapCenter = useMemo(() => ({ lat: 53.1325, lng: 23.1688 }), []);
 
-  const calculateRoute = async (start: Point, end: Point) => {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+  });
+
+  const calculateRoute = async () => {
+    if (!startAddress.trim() || !endAddress.trim()) {
+      setRouteError("Podaj adres startowy i docelowy.");
+      return;
+    }
+
+    if (!window.google?.maps) {
+      setRouteError("Google Maps nie załadowało się poprawnie.");
+      return;
+    }
+
     setIsCalculating(true);
+    setRouteError("");
+
     try {
-      const res = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`
-      );
-      const data = await res.json();
-      if (data.routes && data.routes.length > 0) {
-        const route = data.routes[0];
-        const distKm = route.distance / 1000;
-        setDistanceKm(Math.round(distKm));
-        setManualDistance(Math.round(distKm).toString());
-        
-        // Convert GeoJSON coords to Leaflet [lat, lng]
-        const coords = route.geometry.coordinates.map((c: number[]) => [c[1], c[0]]);
-        setRouteLine(coords);
-      }
-    } catch (e) {
-      console.error("Route calculation failed", e);
+      const directionsService = new window.google.maps.DirectionsService();
+      const waypoints = stops
+        .map((stop) => stop.trim())
+        .filter(Boolean)
+        .map((location) => ({ location, stopover: true }));
+
+      const result = await directionsService.route({
+        origin: startAddress.trim(),
+        destination: endAddress.trim(),
+        waypoints,
+        optimizeWaypoints: false,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      });
+
+      const totalMeters =
+        result.routes[0]?.legs?.reduce((sum, leg) => sum + (leg.distance?.value || 0), 0) || 0;
+      const km = Math.round(totalMeters / 1000);
+
+      setDirections(result);
+      setDistanceKm(km);
+      setManualDistance(String(km));
+    } catch (error) {
+      console.error("Directions calculation failed", error);
+      setRouteError("Nie udało się wyznaczyć trasy. Sprawdź adresy i spróbuj ponownie.");
     } finally {
       setIsCalculating(false);
     }
   };
 
-  const MapClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        if (!startPoint) {
-          setStartPoint(e.latlng);
-        } else if (!endPoint) {
-          setEndPoint(e.latlng);
-        } else {
-          setStartPoint(e.latlng);
-          setEndPoint(null);
-          setRouteLine([]);
-        }
-      },
-    });
-    return null;
+  const updateStop = (index: number, value: string) => {
+    setStops((prev) => prev.map((stop, i) => (i === index ? value : stop)));
   };
 
-  const resetMap = () => {
-    setStartPoint(null);
-    setEndPoint(null);
-    setRouteLine([]);
+  const addStop = () => {
+    setStops((prev) => [...prev, ""]);
+  };
+
+  const removeStop = (index: number) => {
+    setStops((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const resetRoute = () => {
+    setDirections(null);
+    setRouteError("");
     setDistanceKm(parseInt(manualDistance) || 0);
   };
 
@@ -102,12 +93,7 @@ export default function Calculator() {
     setManualDistance(val);
     const parsed = parseInt(val);
     setDistanceKm(isNaN(parsed) ? 0 : parsed);
-    if (val !== "") {
-       // Clear map points if user manually types
-       setStartPoint(null);
-       setEndPoint(null);
-       setRouteLine([]);
-    }
+    if (val !== "") setDirections(null);
   };
 
   const calculateTotal = () => {
@@ -124,41 +110,103 @@ export default function Calculator() {
           <h2 className="text-[#C2185B] text-[11px] font-bold uppercase tracking-widest mb-3">Wycena Przejazdu</h2>
           <h3 className="text-4xl md:text-5xl border-b-0 font-serif text-slate-900 italic mb-6">Wycena Wynajmu</h3>
           <p className="text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
-            Oblicz orientacyjny koszt wynajmu G klasy na Twój ślub. Kliknij na mapie punkt początkowy i końcowy lub wpisz dystans ręcznie.
+            Wyznacz trasę w Google Maps: start, przystanki pośrednie i cel. Dystans policzy się automatycznie.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 bg-white p-6 md:p-8 rounded-[2rem] shadow-xl shadow-pink-900/5 border border-pink-50">
-          <div className="lg:col-span-3 h-[400px] lg:h-[500px] rounded-2xl overflow-hidden relative border border-pink-100 z-0">
-             <MapContainer center={[53.1325, 23.1688]} zoom={11} className="w-full h-full" scrollWheelZoom={false}>
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                />
-                <MapClickHandler />
-                {startPoint && <Marker position={startPoint} icon={startIcon}><Popup>Start</Popup></Marker>}
-                {endPoint && <Marker position={endPoint} icon={endIcon}><Popup>Koniec</Popup></Marker>}
-                {routeLine.length > 0 && <Polyline positions={routeLine} color="#db2777" weight={4} />}
-             </MapContainer>
-             
-             {!startPoint && (
-                <div className="absolute top-4 left-4 right-4 z-[400] bg-white/90 backdrop-blur pointer-events-none p-3 rounded-lg shadow-md border border-slate-200 text-slate-800 font-medium text-sm text-center">
-                  Kliknij na mapie, aby wybrać punkt startowy
+          <div className="lg:col-span-3 rounded-2xl border border-pink-100 bg-[#FDF9FB] p-4 md:p-5 space-y-4">
+            <div className="grid grid-cols-1 gap-3">
+              <input
+                type="text"
+                value={startAddress}
+                onChange={(e) => setStartAddress(e.target.value)}
+                placeholder="Start (np. Białystok, ul. Lipowa 1)"
+                className="w-full px-4 py-3 rounded-lg border border-pink-100 bg-white text-sm outline-none focus:ring-1 focus:ring-pink-400 transition-all text-slate-800"
+              />
+
+              {stops.map((stop, idx) => (
+                <div key={idx} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={stop}
+                    onChange={(e) => updateStop(idx, e.target.value)}
+                    placeholder={`Przystanek ${idx + 1} (opcjonalnie)`}
+                    className="w-full px-4 py-3 rounded-lg border border-pink-100 bg-white text-sm outline-none focus:ring-1 focus:ring-pink-400 transition-all text-slate-800"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeStop(idx)}
+                    className="px-3 rounded-lg border border-pink-100 text-slate-600 hover:bg-pink-50 transition-colors"
+                    aria-label={`Usuń przystanek ${idx + 1}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-             )}
-             {startPoint && !endPoint && (
-                <div className="absolute top-4 left-4 right-4 z-[400] bg-white/90 backdrop-blur pointer-events-none p-3 rounded-lg shadow-md border border-slate-200 text-slate-800 font-medium text-sm text-center">
-                  Kliknij na mapie, aby wybrać punkt docelowy
-                </div>
-             )}
-             {(startPoint || endPoint) && (
-               <button 
-                  onClick={resetMap}
-                  className="absolute bottom-6 right-6 z-[400] bg-white text-slate-800 px-4 py-2 rounded-full shadow-lg font-medium text-sm hover:bg-slate-50 transition-colors border border-slate-200"
+              ))}
+
+              <button
+                type="button"
+                onClick={addStop}
+                className="w-fit inline-flex items-center px-3 py-2 rounded-lg border border-pink-100 text-[#C2185B] text-xs font-bold uppercase tracking-wider hover:bg-pink-50 transition-colors"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Dodaj przystanek
+              </button>
+
+              <input
+                type="text"
+                value={endAddress}
+                onChange={(e) => setEndAddress(e.target.value)}
+                placeholder="Cel (np. Białystok, Rynek Kościuszki)"
+                className="w-full px-4 py-3 rounded-lg border border-pink-100 bg-white text-sm outline-none focus:ring-1 focus:ring-pink-400 transition-all text-slate-800"
+              />
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={calculateRoute}
+                  disabled={isCalculating || !isLoaded}
+                  className="bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest py-3 px-5 rounded-lg hover:bg-black transition-all disabled:opacity-60"
                 >
-                  Resetuj mapę
+                  {isCalculating ? "Wyznaczanie..." : "Wyznacz trasę"}
                 </button>
-             )}
+                <button
+                  type="button"
+                  onClick={resetRoute}
+                  className="bg-white text-slate-700 text-[11px] font-bold uppercase tracking-widest py-3 px-5 rounded-lg border border-pink-100 hover:bg-pink-50 transition-all"
+                >
+                  Wyczyść trasę
+                </button>
+              </div>
+              {routeError && <p className="text-xs text-red-600">{routeError}</p>}
+              {!import.meta.env.VITE_GOOGLE_MAPS_API_KEY && (
+                <p className="text-xs text-amber-700">
+                  Ustaw `VITE_GOOGLE_MAPS_API_KEY` w `.env`, aby aktywować mapę Google i trasowanie.
+                </p>
+              )}
+            </div>
+
+            <div className="h-[320px] md:h-[420px] rounded-2xl overflow-hidden border border-pink-100 bg-white">
+              {isLoaded && import.meta.env.VITE_GOOGLE_MAPS_API_KEY ? (
+                <GoogleMap
+                  mapContainerStyle={{ width: "100%", height: "100%" }}
+                  center={mapCenter}
+                  zoom={11}
+                  options={{
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                  }}
+                >
+                  {directions && <DirectionsRenderer directions={directions} />}
+                </GoogleMap>
+              ) : (
+                <div className="h-full w-full flex items-center justify-center text-center text-sm text-slate-500 px-6">
+                  Mapa Google będzie widoczna po dodaniu klucza API.
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="lg:col-span-2 flex flex-col justify-between">
