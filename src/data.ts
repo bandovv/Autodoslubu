@@ -17,5 +17,5 @@ export const TESTIMONIALS = [
 ];
 
 export const VEHICLE_SPECS = [
-  { label: "BAZA", value: "od 2390 PLN" },
+  { label: "Pakiet ślubny - udekorowanie auta + kierowca", value: "od 2390 PLN" },
 ];
