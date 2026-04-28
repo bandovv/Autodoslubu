@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect, type ChangeEvent } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import { Route, Clock, ChevronRight, Plus, Trash2 } from "lucide-react";
+import AddressAutocomplete from "./AddressAutocomplete";
 
 import "leaflet/dist/leaflet.css";
 
@@ -162,31 +163,29 @@ export default function Calculator() {
           <h2 className="text-[#C2185B] text-[11px] font-bold uppercase tracking-widest mb-3">Wycena Przejazdu</h2>
           <h3 className="text-4xl md:text-5xl border-b-0 font-serif text-slate-900 italic mb-6">Wycena Wynajmu</h3>
           <p className="text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
-            Mapa OpenStreetMap + darmowy routing (OSRM). Wpisz start, opcjonalne przystanki i cel — dystans
-            policzy się automatycznie, bez klucza API.
+            Mapa OpenStreetMap + routing OSRM. Podpowiedzi adresów z Nominatim (jak przy Google) — bez klucza API.
+            Wpisz start, opcjonalne przystanki i cel, wybierz z listy lub dokończ ręcznie.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 bg-white p-6 md:p-8 rounded-[2rem] shadow-xl shadow-pink-900/5 border border-pink-50">
           <div className="lg:col-span-3 rounded-2xl border border-pink-100 bg-[#FDF9FB] p-4 md:p-5 space-y-4">
             <div className="grid grid-cols-1 gap-3">
-              <input
-                type="text"
+              <AddressAutocomplete
                 value={startAddress}
-                onChange={(e) => setStartAddress(e.target.value)}
-                placeholder="Start (np. Białystok, ul. Lipowa 1)"
-                className="w-full px-4 py-3 rounded-lg border border-pink-100 bg-white text-sm outline-none focus:ring-1 focus:ring-pink-400 transition-all text-slate-800"
+                onChange={setStartAddress}
+                placeholder="Start (np. Lipowa 3, Białystok)"
               />
 
               {stops.map((stop, idx) => (
                 <div key={idx} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={stop}
-                    onChange={(e) => updateStop(idx, e.target.value)}
-                    placeholder={`Przystanek ${idx + 1} (opcjonalnie)`}
-                    className="w-full px-4 py-3 rounded-lg border border-pink-100 bg-white text-sm outline-none focus:ring-1 focus:ring-pink-400 transition-all text-slate-800"
-                  />
+                  <div className="min-w-0 flex-1">
+                    <AddressAutocomplete
+                      value={stop}
+                      onChange={(v) => updateStop(idx, v)}
+                      placeholder={`Przystanek ${idx + 1} (opcjonalnie)`}
+                    />
+                  </div>
                   <button
                     type="button"
                     onClick={() => removeStop(idx)}
@@ -207,12 +206,10 @@ export default function Calculator() {
                 Dodaj przystanek
               </button>
 
-              <input
-                type="text"
+              <AddressAutocomplete
                 value={endAddress}
-                onChange={(e) => setEndAddress(e.target.value)}
-                placeholder="Cel (np. Białystok, Rynek Kościuszki)"
-                className="w-full px-4 py-3 rounded-lg border border-pink-100 bg-white text-sm outline-none focus:ring-1 focus:ring-pink-400 transition-all text-slate-800"
+                onChange={setEndAddress}
+                placeholder="Cel (np. Rynek Kościuszki, Białystok)"
               />
 
               <div className="flex flex-wrap gap-2">
