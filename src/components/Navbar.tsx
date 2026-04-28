@@ -1,6 +1,11 @@
 import { Phone } from "lucide-react";
+import { CONTACT_PHONE_DISPLAY, CONTACT_PHONE_TEL } from "../contactInfo";
 
-export default function Navbar() {
+type Props = {
+  onOpenBooking: () => void;
+};
+
+export default function Navbar({ onOpenBooking }: Props) {
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -15,11 +20,20 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-8">
           <button onClick={() => scrollTo("kalkulator")} className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 hover:text-[#C2185B] transition-colors">Wycena</button>
-          <button onClick={() => scrollTo("kontakt")} className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 hover:text-[#C2185B] transition-colors">Kontakt</button>
-          
-          <a href="tel:+48600479905" className="flex items-center border border-pink-100 hover:bg-[#FCE4EC] text-[#C2185B] px-4 py-2 rounded-full transition-colors text-[11px] font-bold uppercase tracking-widest">
+          <button
+            type="button"
+            onClick={onOpenBooking}
+            className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 hover:text-[#C2185B] transition-colors"
+          >
+            Kontakt
+          </button>
+
+          <a
+            href={CONTACT_PHONE_TEL}
+            className="flex items-center border border-pink-100 hover:bg-[#FCE4EC] text-[#C2185B] px-4 py-2 rounded-full transition-colors text-[11px] font-bold uppercase tracking-widest"
+          >
             <Phone className="w-4 h-4 mr-2" />
-            +48 600 479 905
+            {CONTACT_PHONE_DISPLAY}
           </a>
         </div>
       </div>
