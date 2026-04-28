@@ -6,6 +6,7 @@ import {
   CONTACT_PHONE_DISPLAY,
   CONTACT_PHONE_TEL,
 } from "../contactInfo";
+import CopyEmailButton from "./CopyEmailButton";
 
 type Props = {
   open: boolean;
@@ -71,14 +72,17 @@ export default function BookingContactModal({ open, onClose }: Props) {
             <Phone className="h-6 w-6 shrink-0 text-[#C2185B]" aria-hidden />
             {CONTACT_PHONE_DISPLAY}
           </a>
-          <a
-            href={CONTACT_MAILTO}
-            className="flex min-h-[3.25rem] w-full items-center justify-center gap-3 rounded-xl border-2 border-pink-200 bg-[#FDF9FB] px-5 py-3 text-lg md:text-xl font-semibold text-slate-900 hover:bg-[#FCE4EC] transition-colors whitespace-nowrap overflow-x-auto font-mono tracking-wide"
-            title="Adres zwykłą literą l (el), bez polskiego ł — bialystok"
-          >
-            <Mail className="h-6 w-6 shrink-0 text-[#C2185B]" aria-hidden />
-            {CONTACT_EMAIL}
-          </a>
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-stretch">
+            <a
+              href={CONTACT_MAILTO}
+              className="flex min-h-[3.25rem] flex-1 items-center justify-center gap-3 rounded-xl border-2 border-pink-200 bg-[#FDF9FB] px-5 py-3 text-lg md:text-xl font-semibold text-slate-900 hover:bg-[#FCE4EC] transition-colors overflow-x-auto font-mono tracking-wide whitespace-nowrap"
+              title="Adres zwykłą literą l (el), bez polskiego ł — bialystok"
+            >
+              <Mail className="h-6 w-6 shrink-0 text-[#C2185B]" aria-hidden />
+              {CONTACT_EMAIL}
+            </a>
+            <CopyEmailButton className="min-h-[3.25rem] px-5 text-base sm:self-stretch sm:px-6" />
+          </div>
         </div>
       </div>
     </div>
