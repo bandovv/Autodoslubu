@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, type ChangeEvent } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import { Route, Clock, ChevronRight, Plus, Trash2 } from "lucide-react";
 import AddressAutocomplete from "./AddressAutocomplete";
@@ -68,7 +68,6 @@ export default function Calculator() {
   const [startAddress, setStartAddress] = useState("");
   const [endAddress, setEndAddress] = useState("");
   const [stops, setStops] = useState<string[]>([""]);
-  const [routePoints, setRoutePoints] = useState<LatLng[]>([]);
   const [routeLine, setRouteLine] = useState<[number, number][]>([]);
   const [distanceKm, setDistanceKm] = useState<number>(0);
   const [durationHours, setDurationHours] = useState<number>(5);
@@ -103,7 +102,6 @@ export default function Calculator() {
         setRouteError("Nie udało się wyznaczyć trasy między punktami.");
         return;
       }
-      setRoutePoints(points);
       setRouteLine(routed.coords);
       setDistanceKm(routed.distanceKm);
       setManualDistance(String(routed.distanceKm));
@@ -112,7 +110,6 @@ export default function Calculator() {
       setRouteError(
         `Nie znaleziono adresu lub błąd sieci: ${msg || "spróbuj doprecyzować adres (miasto, ulica)."}.`
       );
-      setRoutePoints([]);
       setRouteLine([]);
     } finally {
       setIsCalculating(false);
@@ -132,7 +129,6 @@ export default function Calculator() {
   };
 
   const resetRoute = () => {
-    setRoutePoints([]);
     setRouteLine([]);
     setRouteError("");
     setDistanceKm(parseInt(manualDistance, 10) || 0);
@@ -144,7 +140,6 @@ export default function Calculator() {
     const parsed = parseInt(val, 10);
     setDistanceKm(Number.isNaN(parsed) ? 0 : parsed);
     if (val !== "") {
-      setRoutePoints([]);
       setRouteLine([]);
     }
   };
@@ -244,13 +239,6 @@ export default function Calculator() {
                 />
                 {routeLine.length > 0 && <FitRoute positions={routeLine} />}
                 {routeLine.length > 0 && <Polyline positions={routeLine} color="#db2777" weight={4} />}
-                {routePoints.map((p, idx) => (
-                  <Marker key={`${p.lat},${p.lng},${idx}`} position={[p.lat, p.lng]}>
-                    <Popup>
-                      {idx === 0 ? "Start" : idx === routePoints.length - 1 ? "Cel" : `Przystanek ${idx}`}
-                    </Popup>
-                  </Marker>
-                ))}
               </MapContainer>
             </div>
           </div>
