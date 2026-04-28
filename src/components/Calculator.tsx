@@ -54,6 +54,10 @@ async function routeOsrm(points: LatLng[]): Promise<{ distanceKm: number; coords
   return { distanceKm: Math.round(distKm), coords };
 }
 
+type CalculatorProps = {
+  onOpenBooking: () => void;
+};
+
 function FitRoute({ positions }: { positions: [number, number][] }) {
   const map = useMap();
   useEffect(() => {
@@ -64,7 +68,7 @@ function FitRoute({ positions }: { positions: [number, number][] }) {
   return null;
 }
 
-export default function Calculator() {
+export default function Calculator({ onOpenBooking }: CalculatorProps) {
   const [startAddress, setStartAddress] = useState("");
   const [endAddress, setEndAddress] = useState("");
   const [stops, setStops] = useState<string[]>([""]);
@@ -158,8 +162,7 @@ export default function Calculator() {
           <h2 className="text-[#C2185B] text-[11px] font-bold uppercase tracking-widest mb-3">Wycena Przejazdu</h2>
           <h3 className="text-4xl md:text-5xl border-b-0 font-serif text-slate-900 italic mb-6">Wycena Wynajmu</h3>
           <p className="text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
-            Mapa OpenStreetMap + routing OSRM. Podpowiedzi adresów z Nominatim (jak przy Google) — bez klucza API.
-            Wpisz start, opcjonalne przystanki i cel, wybierz z listy lub dokończ ręcznie.
+            Wpisz start, przystanki pośrednie i cel, wybierz adres z listy lub dopisz ręcznie, następnie wyznacz trasę.
           </p>
         </div>
 
@@ -225,10 +228,6 @@ export default function Calculator() {
                 </button>
               </div>
               {routeError && <p className="text-xs text-red-600">{routeError}</p>}
-              <p className="text-[10px] text-slate-400 leading-relaxed">
-                Adresy są wyszukiwane przez Nominatim (OpenStreetMap). Przy wielu przystankach kolejne zapytania są
-                lekko opóźnione, żeby nie obciążać serwisu.
-              </p>
             </div>
 
             <div className="h-[320px] md:h-[420px] rounded-2xl overflow-hidden border border-pink-100 z-0 relative">
@@ -307,7 +306,11 @@ export default function Calculator() {
                   )}
                 </ul>
 
-                <button className="w-full bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest py-4 rounded-lg hover:bg-black transition-all flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={onOpenBooking}
+                  className="w-full bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest py-4 rounded-lg hover:bg-black transition-all flex items-center justify-center"
+                >
                   Zarezerwuj Termin
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </button>

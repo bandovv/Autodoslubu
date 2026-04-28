@@ -1,4 +1,5 @@
 import { Phone, Mail } from "lucide-react";
+import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_TEL } from "../contactInfo";
 
 export default function Contact() {
   return (
@@ -16,23 +17,29 @@ export default function Contact() {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-          <a href="tel:+48600479905" className="flex items-center w-full sm:w-auto bg-white hover:bg-[#FDF9FB] border border-pink-100 shadow-sm shadow-pink-900/5 p-6 rounded-2xl transition-all group">
+          <a
+            href={CONTACT_PHONE_TEL}
+            className="flex items-center w-full sm:w-auto bg-white hover:bg-[#FDF9FB] border border-pink-100 shadow-sm shadow-pink-900/5 p-6 rounded-2xl transition-all group"
+          >
             <div className="bg-[#FCE4EC]/50 rounded-full p-4 mr-5 group-hover:bg-pink-100 transition-colors">
               <Phone className="w-6 h-6 text-[#C2185B]" />
             </div>
             <div className="text-left">
               <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Telefon</div>
-              <div className="text-slate-900 font-serif text-xl">+48 600 479 905</div>
+              <div className="text-slate-900 font-serif text-xl">{CONTACT_PHONE_DISPLAY}</div>
             </div>
           </a>
-          
-          <a href="mailto:kontakt@viptransferbialystok.pl" className="flex items-center w-full sm:w-auto bg-white hover:bg-[#FDF9FB] border border-pink-100 shadow-sm shadow-pink-900/5 p-6 rounded-2xl transition-all group">
+
+          <a
+            href={CONTACT_MAILTO}
+            className="flex items-center w-full sm:w-auto bg-white hover:bg-[#FDF9FB] border border-pink-100 shadow-sm shadow-pink-900/5 p-6 rounded-2xl transition-all group"
+          >
             <div className="bg-[#FCE4EC]/50 rounded-full p-4 mr-5 group-hover:bg-pink-100 transition-colors">
               <Mail className="w-6 h-6 text-[#C2185B]" />
             </div>
             <div className="text-left">
               <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">E-mail</div>
-              <div className="text-slate-900 font-serif pl-0 text-xl">kontakt@viptransferbialystok.pl</div>
+              <div className="text-slate-900 font-serif pl-0 text-xl break-all">{CONTACT_EMAIL}</div>
             </div>
           </a>
         </div>
