@@ -12,16 +12,56 @@ import gklasa9 from "../assets/gallery/gklasa-9.png";
 import gklasa10 from "../assets/gallery/gklasa-10.png";
 
 const GALLERY_IMAGES = [
-  gklasa1,
-  gklasa2,
-  gklasa3,
-  gklasa4,
-  gklasa5,
-  gklasa6,
-  gklasa7,
-  gklasa8,
-  gklasa9,
-  gklasa10,
+  {
+    src: gklasa1,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa2,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa3,
+    cardClass: "w-[85vw] sm:w-[48vw] md:w-[34vw] aspect-[4/3]",
+    imageClass: "object-contain object-center scale-[1.03]",
+  },
+  {
+    src: gklasa4,
+    cardClass: "w-[85vw] sm:w-[48vw] md:w-[34vw] aspect-[4/3]",
+    imageClass: "object-contain object-center scale-[1.03]",
+  },
+  {
+    src: gklasa5,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa6,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa7,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa8,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa9,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
+  {
+    src: gklasa10,
+    cardClass: "w-[82vw] sm:w-[44vw] md:w-[30vw] aspect-[4/5]",
+    imageClass: "object-contain object-center scale-[1.08]",
+  },
 ];
 
 export default function Gallery() {
@@ -71,12 +111,12 @@ export default function Gallery() {
           {GALLERY_IMAGES.map((img, idx) => (
              <div 
                key={idx} 
-               className="shrink-0 w-[85vw] sm:w-[45vw] md:w-[32vw] aspect-[4/3] snap-start overflow-hidden rounded-3xl border border-pink-50 shadow-xl shadow-pink-900/5 group cursor-zoom-in bg-white flex items-center justify-center"
+               className={`shrink-0 ${img.cardClass} snap-start overflow-hidden rounded-3xl border border-pink-50 shadow-xl shadow-pink-900/5 group cursor-zoom-in bg-white flex items-center justify-center`}
              >
                <img 
-                 src={img} 
+                 src={img.src}
                  alt={`Galeria ${idx + 1}`} 
-                 className="w-full h-full object-contain group-hover:scale-125 transition-transform duration-700 ease-in-out" 
+                 className={`w-full h-full ${img.imageClass} group-hover:scale-110 transition-transform duration-700 ease-in-out`}
                />
              </div>
           ))}
